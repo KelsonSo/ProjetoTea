@@ -20,11 +20,13 @@ body {
     background-color: #c83600;
     font-family: 'Agrandir', sans-serif;
     color: #ffffff;
-    min-height: 100vh;
+    /* svh garante a altura perfeita no celular, descontando as barras do navegador */
+    height: 100vh;
+    height: 100svh; 
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow-x: hidden;
+    overflow: hidden; /* Trava a rolagem para a menina não sair do lugar */
 }
 
 /* ==========================================
@@ -37,22 +39,25 @@ body {
     background-repeat: repeat-x;
     background-position: top center;
     background-size: auto 24px;
+    flex-shrink: 0; /* Impede que a barra amasse em telas muito pequenas */
 }
 
 /* ==========================================
-   3. CONTAINER PRINCIPAL (Ajustado para aproximar os elementos)
+   3. CONTAINER PRINCIPAL (Ajustado para Telas de Celular)
    ========================================== */
 .container {
     width: 90%;
     max-width: 440px;
-    padding: 20px 10px 0 10px; /* Mantém zerado embaixo para a menina não subir */
+    padding: 15px 10px 0 10px; /* Mantém a base zerada */
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     flex-grow: 1;
-    justify-content: flex-start; /* Altera para empilhar tudo perto no topo */
-    gap: 15px; /* Diminui o espaçamento geral padrão entre os blocos */
+    /* Faz a distribuição inteligente: empurra o bloco da menina 
+       automaticamente para o limite físico inferior da tela */
+    justify-content: space-between; 
+    height: calc(100% - 40px);
 }
 
 /* ==========================================
@@ -62,13 +67,14 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 15px;
+    gap: 12px;
     width: 100%;
-    padding: 0 10px;
+    padding: 0 5px;
+    flex-shrink: 0;
 }
 
 .header-construcao h1 {
-    font-size: 1.6rem;
+    font-size: 1.5rem; /* Levemente reduzido para celulares pequenos não quebrarem muitas linhas */
     font-weight: bold;
     line-height: 1.2;
     text-align: left;
@@ -76,7 +82,7 @@ body {
 }
 
 .img-losango {
-    width: 45px;
+    width: 42px;
     height: auto;
     flex-shrink: 0;
 }
@@ -84,10 +90,14 @@ body {
 /* ==========================================
    5. ÁREA DE TEXTO
    ========================================== */
+.texto-principal {
+    flex-shrink: 0;
+}
+
 .texto-principal p {
-    font-size: 1.05rem;
-    line-height: 1.5;
-    margin-bottom: 10px; /* Reduzido para aproximar as linhas */
+    font-size: 1rem;
+    line-height: 1.4;
+    margin-bottom: 8px; /* Espaço otimizado */
 }
 
 .texto-principal p.destaque {
@@ -95,34 +105,33 @@ body {
 }
 
 /* ==========================================
-   6. BASE COLA DA TELA (MENINA + BRILHO REAPROXIMADOS)
+   6. BASE TOTALMENTE FIXADA EMBAIXO (MENINA + BRILHO)
    ========================================== */
 .ilustracao-container {
     position: relative;
     width: 100%;
-    max-width: 280px;
-    /* Tira o 'margin: auto auto 0 auto' antigo que criava o espaço 
-       e fixa uma margem superior controlada para aproximar do texto */
-    margin: 15px auto 0 auto; 
+    max-width: 260px; /* Um tiquinho menor para dar respiro ao texto no celular */
+    margin: 0 auto;
     display: flex;
     justify-content: center;
     align-items: flex-end;
+    margin-top: auto; /* Empurra e cola no chão do container */
 }
 
 .img-menina {
     width: 100%;
     height: auto;
-    display: block; /* Remove o espaçamento fantasma na base */
+    display: block; /* Elimina vácuos fantasmas na base */
     z-index: 1;
 }
 
 .img-brilho {
     position: absolute;
-    left: -10px;       /* Mantém sobrepondo suavemente a lateral dela */
-    bottom: 30px;      /* Altura exata para o ombro esquerdo */
-    width: 75px;
+    left: -10px;       /* Mantém mordendo de leve a manga da menina */
+    bottom: 25px;      /* Altura exata sobre o braço dela */
+    width: 70px;       /* Mantém o destaque visual bonito */
     height: auto;
-    z-index: 10;       /* Por cima da menina */
+    z-index: 10;       /* Garante que fique sobreposta */
     pointer-events: none;
     animation: pulsar-brilho 2.5s infinite alternate ease-in-out;
 }
@@ -143,10 +152,14 @@ body {
    7. AJUSTES PARA TELAS GRANDES (DESKTOP)
    ========================================== */
 @media (min-width: 768px) {
+    body {
+        overflow: auto; /* No computador pode ter rolagem se o usuário encolher a tela */
+    }
+
     .container {
         max-width: 700px;
-        justify-content: center; /* No PC pode manter centralizado */
-        gap: 35px;
+        justify-content: center; /* No computador centraliza lindamente no meio */
+        gap: 40px;
         padding-top: 30px;
     }
 
@@ -160,11 +173,12 @@ body {
 
     .texto-principal p {
         font-size: 1.35rem;
+        margin-bottom: 15px;
     }
 
     .ilustracao-container {
         max-width: 340px;
-        margin-top: 30px;
+        margin-top: 0;
     }
 
     .img-brilho {
